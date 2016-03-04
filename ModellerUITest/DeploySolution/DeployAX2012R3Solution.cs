@@ -31,7 +31,6 @@ namespace ModellerUITest.DeploySolution
             element = wait.Until((d) =>
             {
                 IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-                //bool isBlocked = (bool)js.ExecuteScript(@"return $('.ctl00_ctl00_Fcph_Mcph_portalBody_multipaneView_divPanes').is(':visible')");
                 bool isBusy = (bool)js.ExecuteScript(@"return window.$ && $('.progress-bar').css('visibility') == 'visible' || window.$ && $('.loadingOverlay,.block-clicks').length > 0;");
                 if (!isBusy)
                     return driver.FindElement(By.CssSelector(@"div[ui-id='Zap_BI_Portal_OptionItemTypes_New_ResourceBase__ModelWizardResource']"));
@@ -71,12 +70,16 @@ namespace ModellerUITest.DeploySolution
 
             //Test Connection
             wait.Timeout = TimeSpan.FromMinutes(5);//AX connection validation can take quite long 
-            element = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(@"icon-button[ng-click='testConnection.test\(\)']")));
+            driver.FindElement(By.CssSelector(@"icon-button[ng-click='testConnection.test\(\)']")).Click();
+
+            element = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector((@"icon-button[ng-click='modelWizardCtrl.goToNextPage\(\)']"))));
             element.Click();
 
-
-
-         
+            //Partition selection
+            element = wait.Until(d => d.FindElement(By.XPath(@"(//input[@ng-model='combo.text'])[1]")));
+            IJavaScriptExecutor j = driver as IJavaScriptExecutor;
+            j.ExecuteScript(@"$(""input[ng-model='combo.text']"").removeAttr('readonly')");
+            element.SendKeys(@"Initial Partition (initial)");
 
         }
         public static string GenerateName(int length)
