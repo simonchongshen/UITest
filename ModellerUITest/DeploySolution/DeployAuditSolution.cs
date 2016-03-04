@@ -9,10 +9,10 @@ using System.Text;
 namespace ModellerUITest.DeploySolution
 {
     [TestClass]
-    public class DeployAuditSolutionTest
+    public class DeployAuditSolution
     {
         [TestMethod]
-        public void DeployAuditSolution()
+        public void DeployAuditSolutionTest()
         {
 
             IWebDriver driver = new ChromeDriver();
