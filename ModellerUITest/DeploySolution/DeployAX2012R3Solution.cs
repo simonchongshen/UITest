@@ -37,12 +37,31 @@ namespace ModellerUITest.DeploySolution
                 else
                     return null;
             });
-            element.Click();
+            int tries = 0;
+            while (tries < 100)
+                try
+                {
+                    element.Click();
+                }
+                catch
+                { }
+                finally { tries++; };
+
+            Console.WriteLine(tries);
 
             driver.Manage().Window.Maximize();
 
             //Select AX 2012R3 solution
             element = wait.Until(d => d.FindElement(By.CssSelector("span[tooltip='Zap.Modeller.Tooltips.Wizard.CreateWizardSolutionTab']")));
+            tries = 0;
+            while (tries < 100)
+                try
+                {
+                    element.Click();
+                }
+                catch
+                { }
+                finally { tries++; };
             element.Click();
 
             element = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(("(//*[contains(text(), 'AX 2012 R3')])"))));
@@ -76,9 +95,11 @@ namespace ModellerUITest.DeploySolution
             element.Click();
 
             //Partition selection
-            element = wait.Until(d => d.FindElement(By.XPath(@"(//input[@ng-model='combo.text'])[1]")));
-            IJavaScriptExecutor j = driver as IJavaScriptExecutor;
+            element = wait.Until(d => d.FindElement(By.CssSelector(@"input[ng-model='combo.text']")));
+            IJavaScriptExecutor j = (IJavaScriptExecutor) driver;
             j.ExecuteScript(@"$(""input[ng-model='combo.text']"").removeAttr('readonly')");
+            //j.ExecuteScript("arguments.removeAttribute('readonly','readonly')",element);
+            element = wait.Until(d => d.FindElement(By.CssSelector(@"input[ng-model='combo.text']")));
             element.SendKeys(@"Initial Partition (initial)");
 
         }
